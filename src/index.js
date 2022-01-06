@@ -5,30 +5,31 @@ const port = 3333;
 
 app.use(express.json());
 
+let data_app = ["Gabriel", "Matheus"];
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
-});
-
-app.listen(port, () => {
-  console.log(`Running at http://localhost:${port}`);
 });
 
 const routes = Router();
 
 routes.get("/api/app", (req, res) => {
-  return res.json("Gabriel");
+  return res.json(data_app);
 });
 routes.post("/api/app", (req, res) => {
   const { data } = req.body;
-  return res.json(data);
+  data_app.push(data);
+  return res.json(data_app);
 });
-routes.put("/api/app", (req, res) => {
-  const { data } = req.body;
-  return res.json(`${data}-updated`);
-});
+
 routes.delete("/api/app", (req, res) => {
   const { data } = req.body;
-  return res.json(`${data}-deleted`);
+  data_app = data_app.filter((el) => el !== data);
+  return res.json(data_app);
 });
 
 app.use(routes);
+
+app.listen(port, () => {
+  console.log(`Running at http://localhost:${port}`);
+});
